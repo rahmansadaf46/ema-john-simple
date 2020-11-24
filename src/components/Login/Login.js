@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useContext } from 'react';
 import { UserContext } from '../../App';
 import { useHistory, useLocation } from 'react-router-dom';
-import { createUserWithEmailAndPassword, handleFbSignIn, handleGoogleSignIn, handleSignOut, initializeLoginFramework, signInWithEmailAndPassword } from './loginManager';
+import { createUserWithEmailAndPassword, handleFbSignIn, handleGoogleSignIn, handleSignOut, initializeLoginFramework, resetPassword, signInWithEmailAndPassword } from './loginManager';
 
 
 
 function Login() {
     const [newUser, setNewUser] = useState(false);
+    document.title = "Login";
     const [user, setUser] = useState({
         isSignedIn: false,
         name: '',
@@ -138,6 +139,7 @@ function Login() {
                 <br />
                 <input type="submit" value={newUser ? 'Sign Up' : 'Sign In'} />
             </form>
+            <button onClick={() => resetPassword(user.email)}>Reset Password</button>
             <p style={{ color: 'red' }}>{user.error}</p>
             { user.success && <p style={{ color: 'green' }}>User {newUser ? "created" : "Logged In"} successfully</p>}
         </div>

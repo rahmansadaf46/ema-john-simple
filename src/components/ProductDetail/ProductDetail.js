@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import fakeData from '../../fakeData';
+// import fakeData from '../../fakeData';
 import Product from '../Product/Product';
 
 const ProductDetail = () => {
     const { productKey } = useParams();
-    const product = fakeData.find(pd => pd.key === productKey);
+
+    const [product, setProduct] = useState({});
+    const [loading, setLoading] = useState(true);
+    document.title = "Product Detail";
+    useEffect(() => {
+        fetch('https://intense-waters-18558.herokuapp.com/product/' + productKey)
+            .then(res => res.json())
+            .then(data => {
+                setProduct(data);
+                setLoading(false);
+            })
+    }, [productKey])
+    // const product = products.find(pd => pd.key === productKey);
     // console.log(product);
 
     const productDetailStyle = {
@@ -15,8 +27,11 @@ const ProductDetail = () => {
     }
     return (
         <div style={productDetailStyle}>
-            {/* <h2>{productKey} Detail is coming soon!!</h2> */}
-            <Product showAddToCart={false} product={product}></Product>
+
+            {
+                loading ? <p>loading...</p> :
+                    <Product showAddToCart={false} product={product}></Product>
+            }
         </div>
     );
 };

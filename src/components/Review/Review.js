@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getDatabaseCart, removeFromDatabaseCart, processOrder } from '../../utilities/databaseManager';
-import fakeData from '../../fakeData';
+// import fakeData from '../../fakeData';
 import ReviewItem from '../ReviewItem/ReviewItem';
 import Cart from '../Cart/Cart';
 import happyImage from '../../images/giphy.gif'
@@ -35,16 +35,26 @@ const Review = () => {
         const savedCart = getDatabaseCart();
         // console.log(savedCart);
         const productKeys = Object.keys(savedCart);
-        const cartProducts = productKeys.map(key => {
-            const product = fakeData.find(pd => pd.key === key);
+        document.title = "Order Review";
+        fetch('https://intense-waters-18558.herokuapp.com/productByKeys', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productKeys)
+        })
+            .then(res => res.json())
+            .then(data => setCart(data))
 
-            product.quantity = savedCart[key];
-            return product;
+        // // alternative way with fake data
+        // const cartProducts = productKeys.map(key => {
+        //     const product = fakeData.find(pd => pd.key === key);
 
-        });
-        // const count = Object.values(savedCart);
-        // console.log(cartProducts);
-        setCart(cartProducts);
+        //     product.quantity = savedCart[key];
+        //     return product;
+
+        // });
+        // // const count = Object.values(savedCart);
+        // // console.log(cartProducts);
+        // setCart(cartProducts);
 
     }, []);
 

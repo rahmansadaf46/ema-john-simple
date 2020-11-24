@@ -1,4 +1,3 @@
-
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConfig from './firebase.config';
@@ -36,9 +35,15 @@ export const handleFbSignIn = () => {
             // This gives you a Facebook Access Token. You can use it to access the Facebook API.
             var token = result.credential.accessToken;
             // The signed-in user info.
-            var user = result.user;
-            user.success = true;
-            return user;
+            const { displayName, email, photoURL } = result.user;
+            const signedInUser = {
+                isSignedIn: true,
+                name: displayName,
+                email: email,
+                photo: photoURL,
+                success: true
+            }
+            return signedInUser;
         }).catch(function (error) {
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -72,6 +77,7 @@ export const createUserWithEmailAndPassword = (name, email, password) => {
             newUserInfo.error = '';
             newUserInfo.success = true;
             updateUserName(name);
+            verifyEmail();
             return newUserInfo;
         })
 
@@ -113,5 +119,27 @@ const updateUserName = name => {
         console.log('user name updated successfully')
     }).catch(function (error) {
         console.log(error)
+    });
+}
+
+
+const verifyEmail = () => {
+    var user = firebase.auth().currentUser;
+
+    user.sendEmailVerification().then(function () {
+        // Email sent.
+    }).catch(function (error) {
+        // An error happened.
+    });
+}
+
+
+export const resetPassword = email => {
+    var auth = firebase.auth();
+
+    auth.sendPasswordResetEmail(email).then(function () {
+        // Email sent.
+    }).catch(function (error) {
+        // An error happened.
     });
 }
