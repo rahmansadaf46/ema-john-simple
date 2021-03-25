@@ -42,7 +42,20 @@ const Review = () => {
             body: JSON.stringify(productKeys)
         })
             .then(res => res.json())
-            .then(data => setCart(data))
+            .then(data => {
+                const cartProducts = productKeys.map(key => {
+                    const product = data.find(pd => pd.key === key);
+
+                    product.quantity = savedCart[key];
+                    return product;
+
+                });
+                // const count = Object.values(savedCart);
+                // console.log(cartProducts);
+                setCart(cartProducts);
+
+                // setCart(data)
+            })
 
         // // alternative way with fake data
         // const cartProducts = productKeys.map(key => {

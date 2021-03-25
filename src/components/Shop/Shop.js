@@ -38,7 +38,20 @@ const Shop = () => {
             body: JSON.stringify(productKeys)
         })
             .then(res => res.json())
-            .then(data => setCart(data))
+            .then(data => {
+                if (data.length) {
+                    const previousCart = productKeys.map(existingKey => {
+                        const product = data.find(pd => pd.key === existingKey);
+                        // console.log(product);
+                        // console.log(existingKey, savedCart[existingKey]);
+                        product.quantity = savedCart[existingKey];
+                        // console.log(product);
+                        return product;
+                    })
+                    setCart(previousCart);
+                }
+
+            })
 
 
         // //alternative way
