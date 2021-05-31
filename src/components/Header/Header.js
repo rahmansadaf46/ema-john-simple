@@ -15,12 +15,18 @@ const Header = () => {
                 <Link to="/shop">Shop</Link>
                 <Link to="/review">Order Review</Link>
                 <Link to="/inventory">Manage Inventory</Link>
-                <button onClick={() => setLoggedInUser({})}>Sign Out</button>
+                <button onClick={() => {
+                    setLoggedInUser({});
+                    sessionStorage.clear();
+                }}>Sign Out</button>
 
-                {loggedInUser.email && <span style={{ margin: '20px', color: 'white' }}>
-                    Welcome back {loggedInUser.name && loggedInUser.name.split(" ").slice(0, 1)}
-                    {loggedInUser.displayName && loggedInUser.displayName.split(" ").slice(0, 1)}
-                </span>}
+
+                {sessionStorage.getItem('token') || loggedInUser.email ? <span style={{ margin: '20px', color: 'white' }}>
+                    Welcome back {sessionStorage.getItem('name') && sessionStorage.getItem('name').split(" ").slice(0, 1)}
+                    {/* {loggedInUser.displayName && loggedInUser.displayName.split(" ").slice(0, 1)} */}
+                </span> :
+                    <span></span>
+                }
             </nav>
         </div>
     );
